@@ -1,7 +1,7 @@
 {
-  "name": "taaabs-remote-ressources",
+  "name": "taaabs-remote-resources",
   "version": "1.0.0",
-  "description": "`<taaabs-remote-ressources>` is a graphical representation of the user choice for an available resource on the KTBS.",
+  "description": "`<taaabs-remote-resources>` is a graphical representation of the user choice for an available resource on the KTBS.",
   "keywords": [
     "web-components",
     "polymer",
@@ -12,10 +12,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/TaaabsElements/taaabs-remote-ressources.git"
+    "url": "https://github.com/TaaabsElements/taaabs-remote-resources.git"
   },
-  "main": "taaabs-remote-ressources.html",
-  "license": "https://github.com/TaaabsElements/taaabs-remote-ressources/LICENSE",
+  "main": "taaabs-remote-resources.html",
+  "license": "https://github.com/TaaabsElements/taaabs-remote-resources/LICENSE",
   "dependencies": {
     "polymer": "polymer/polymer#^1.0.0",
     "jquery": "~2.1.4",

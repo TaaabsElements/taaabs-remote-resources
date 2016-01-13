@@ -1,6 +1,7 @@
-# taaabs-remote-ressources
+# taaabs-remote-resources
 
-`<taaabs-remote-ressources>` is a graphical representation of the user choice for an available resource on the KTBS.
+`<taaabs-remote-resources>` is a graphical representation of the user choice for an available resource on the KTBS.
 
 @use Samotraces.Ktbs.Resource
-@element taaabs-remote-ressources
+
+@element taaabs-remote-resources
