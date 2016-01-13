@@ -1,0 +1,107 @@
+<script src="../jquery/dist/jquery.min.js"></script>
+<script src="../jsonld/js/jsonld.js"></script>
+
+<dom-module id="taaabs-remote-ressources">
+  <style>
+    :host {
+      display: block;
+    }
+    paper-button {
+      background: #4285F4;
+      color: #FFF;
+    }
+  </style>
+  <template>
+    <h1 class="paper-font-display1"><span>Remote Resource Connect</span></h1>
+    <form is="iron-form" id="form" method="post" action="/form/handler">
+      <paper-input id="url-input" label="Resource URL:" char-counter type="url" value="{{remoteUrl}}" error-message="Invalid URL :("></paper-input>
+      <div>
+      <a href="{{encodedLink}}" class="inherit">
+        <paper-button id="connect-button" disabled>connect to this <span>{{resourceType}}</span></paper-button>
+      </a>
+    </div>
+    </form>
+  </template>
+
+  <script>
+    /* global Polymer, Samotraces */
+    (function () {
+      /**
+       * `<taaabs-remote-ressources>` is a graphical representation of the user choice for an available resource on the KTBS.
+       *
+       * @use Samotraces.Ktbs.Resource
+       * @element taaabs-remote-ressources
+       */
+      Polymer({
+        is: 'taaabs-remote-ressources',
+        properties: {
+          /**
+           * Browser-side URL
+           */
+          localRoute: {
+            type: String,
+            value: '/ktbs/'
+          },
+          remoteUrl: {
+            type: String,
+            value: 'http://localhost:8001/',
+            observer: '_remoteUrlChanged'
+          },
+          encodedLink: {
+            type: String,
+            computed: '_computeEncodedLink(localRoute, remoteUrl)'
+          },
+          resourceType: {
+            type: String,
+            computed: '_computedResourceType(localRoute)'
+          }
+        },
+        _remoteUrlChanged: function(remoteUrl) {
+          var that = this;
+
+          var resource = new Samotraces.Ktbs.Resource(remoteUrl, remoteUrl);
+          resource.force_state_refresh({'_on_state_refresh_': false}, function(resource) { // jshint ignore:line
+            // keys: Resources Types. values: client-side URLs
+            var cases = {
+              'KtbsRoot': '/ktbs/',
+              'Base': '/ktbs-base/',
+              'StoredTrace': '/ktbs-trace/',
+              'ComputedTrace': '/ktbs-trace/',
+              'TraceModel': '/ktbs-model/',
+            };
+
+            var type = '';
+            if (resource['@graph'] && resource['@graph'].length >= 1) {
+              // This is a JsonLD describing a Model.
+              if (resource['@graph'][0]['@type']) { // assert
+                type = resource['@graph'][0]['@type'] || '/notfound/';
+              }
+            } else {
+              // This is a JsonLD describing a KTBS|Base|Trace.
+              if (resource['@type']) { // assert
+                type = resource['@type'] || '/notfound/';
+              }
+            }
+            that.set('localRoute', cases[type]);
+            Polymer.dom(that.root).querySelector('#url-input').invalid = false;
+            Polymer.dom(that.root).querySelector('#connect-button').disabled = false;
+          }, function (error) {
+            console.log(error);
+            Polymer.dom(that.root).querySelector('#url-input').invalid = true;
+            Polymer.dom(that.root).querySelector('#connect-button').disabled = true;
+          });
+        },
+        _computeEncodedLink: function(localRoute, remoteUrl) {
+          return localRoute + '\?url=' + encodeURIComponent(remoteUrl);
+        },
+        _computedResourceType: function(localRoute) {
+          // '/ktbs-trace/' -----> 'trace'
+          // '/ktbs-base/' -----> 'base'
+          // '/ktbs/' -----> 'ktbs'
+          return localRoute.replace(/\//g, '').replace(/.*\-/, '');
+        }
+      });
+    })();
+  </script>
+
+</dom-module>
