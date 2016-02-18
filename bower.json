@@ -18,8 +18,6 @@
   "license": "https://github.com/TaaabsElements/taaabs-remote-resources/LICENSE",
   "dependencies": {
     "polymer": "polymer/polymer#^1.0.0",
-    "jquery": "~2.1.4",
-    "jsonld": "~0.3.24",
     "paper-input": "polymerelements/paper-input#^1.0.0",
     "paper-button": "polymerelements/paper-button#^1.0.0"
   },
